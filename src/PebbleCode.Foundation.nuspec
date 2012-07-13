@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<dependency>
+<package>
   <metadata>
     <id>PebbleCode.Foundation</id>
     <version></version>
@@ -19,4 +19,4 @@
 		<dependency id="MySql.Data" version="6.5.4" />
   </dependencies>
   </metadata>
-</dependency>
+</package>

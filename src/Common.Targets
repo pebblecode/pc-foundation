@@ -16,7 +16,7 @@
       <ProjOutputFile Include="$(SourceOutputDir)\*.dll;$(SourceOutputDir)\*.xml;$(SourceOutputDir)\*.pdb"/>
     </ItemGroup>
     <Copy SourceFiles="@(ProjOutputFile)"
-          DestinationFolder="$(SolutionDir)\obj\$(Configuration)" />
+          DestinationFolder="$(SolutionDir)\obj\$(Configuration)\lib" />
   </Target>
   
 </Project>
