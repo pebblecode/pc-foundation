@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<project name="svnutils" default="usage" xmlns="http://nant.sf.net/release/0.90/nant.xsd">
+
+  <!-- 
+  ********************************************************
+  *** commit changes on a given path with a message
+  *** Expected property {path}, {sql.script}
+  ******************************************************** -->
+  <target name="svn.commit">
+    
+    <fail if="${not property::exists('path')}" message="Set property 'path' before committing" />
+    <fail if="${not property::exists('message')}" message="Set property 'message' before committing" />
+    
+    <pathexpander path="${path}" />
+    <echo message="Automated build commit of ${expandedpath}" />
+    <exec program="svn">
+      <arg value="commit"/>
+      <arg value="--username=${svn.user}"/>
+      <arg value="--password=&quot;${svn.password}&quot;"/>
+      <arg value="--message==&quot;${message}&quot;"/>
+      <arg value="${expandedpath}" />
+    </exec>
+  </target>
+
+  <!-- 
+  ********************************************************
+  *** svn.export
+  *** Expected property {src.path}, {dest.path}
+  ******************************************************** -->
+  <target name="svn.export">
+    
+    <fail if="${not property::exists('src.path')}" message="Set property 'src.path' before exporting" />
+    <fail if="${not property::exists('dest.path')}" message="Set property 'src.path' before exporting" />
+    
+    <property name="dir" value="${dest.path}"/>
+    <call target="svn._deleteDir"/>
+    
+    <exec program="svn">
+      <arg value="export"/>
+      <arg value="--username=${svn.user}"/>
+      <arg value="--password=&quot;${svn.password}&quot;"/>
+      <arg value="${src.path}" />
+      <arg value="${dest.path}" />
+    </exec>
+  </target>
+
+  <!-- 
+  ********************************************************
+  *** svn.copy
+  *** Expected property {src.path}, {dest.path} {message}
+  ******************************************************** -->
+  <target name="svn.copy">
+    
+    <fail if="${not property::exists('src.path')}" message="Set property 'src.path' before copying" />
+    <fail if="${not property::exists('dest.path')}" message="Set property 'dest.path' before copying" />
+    <fail if="${not property::exists('message')}" message="Set property 'message' before copying" />
+    
+    <echo message="svn copy ${src.path} ${dest.path}" />
+    <exec program="svn">
+      <arg value="copy"/>
+      <arg value="${src.path}" />
+      <arg value="${dest.path}" />
+      <arg value="--username=${svn.user}"/>
+      <arg value="--password=&quot;${svn.password}&quot;"/>
+      <arg value="--message==&quot;${message}&quot;"/>
+    </exec>
+  </target>
+
+  <!-- 
+  ********************************************************
+  *** Coping trunk to release candidate branch
+  *** Expected property {svn.trunk.url}, {svn.rc.url}
+  ******************************************************** -->
+  <target name="svn.promotetrunk" description="Promotes trunk to release candidate branch">
+
+    <property name="src.path" value="${svn.trunk.url}" />
+    <property name="dest.path" value="${svn.rc.url}" />
+    <property name="message" value="Promoting trunk to release candidate" />
+
+    <exec program="svn">
+      <arg value="delete"/>
+      <arg value="${dest.path}" />
+      <arg value="--username=${svn.user}"/>
+      <arg value="--password=&quot;${svn.password}&quot;"/>
+      <arg value="--message==&quot;${message}&quot;"/>
+      <arg value="--non-interactive"/>
+    </exec>
+
+    <call target="svn.copy"/>
+    
+  </target>
+
+
+  <!--
+  ========================================================
+  **************** INTERNAL TARGETS **********************
+  ======================================================== -->
+
+  <!--
+  ********************************************************
+  *** Burn existing files in run directory  
+  ******************************************************** -->
+  <target name="svn._deleteDir">
+    <fail message="Must define property 'dir'" unless="${property::exists('dir')}"/>
+    <delete dir="${dir}" failonerror="true" if="${directory::exists(dir)}" />
+  </target>
+
+</project>

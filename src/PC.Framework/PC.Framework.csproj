@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A9047B13-8A1A-4262-A192-BC1D939A70F2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PebbleCode.Framework</RootNamespace>
+    <AssemblyName>PC.Framework</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Tools|AnyCPU'">
+    <OutputPath>bin\Tools\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FSharp.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="IBatisNet.Common, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\iBatis\IBatisNet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=5.0.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Unity.Interception.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception.Configuration">
+      <HintPath>..\packages\Unity.Interception.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Interception.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Starksoft.Net.Ftp, Version=1.0.158.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\StarkSoftFtp\Starksoft.Net.Ftp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collections\Flags.cs" />
+    <Compile Include="Collections\FifoBuffer.cs" />
+    <Compile Include="Collections\PropertyBag.cs" />
+    <Compile Include="Collections\ThreadSafe\ThreadSafeDictionary.cs" />
+    <Compile Include="Collections\ThreadSafe\ThreadSafeList.cs" />
+    <Compile Include="Configuration\ApplicationSettingsHelper.cs" />
+    <Compile Include="Configuration\ApplicationSettings.cs" />
+    <Compile Include="Configuration\DatabaseSettings.cs" />
+    <Compile Include="Configuration\FtpSettings.cs" />
+    <Compile Include="Configuration\ProfilerSettings.cs" />
+    <Compile Include="Configuration\MailSettings.cs" />
+    <Compile Include="Data\Param.cs" />
+    <Compile Include="Dependancy\Resolver.cs" />
+    <Compile Include="Email\IEmailer.cs" />
+    <Compile Include="FrameworkModule.cs" />
+    <Compile Include="IoC\InjectAttribute.cs" />
+    <Compile Include="Exceptions\ExpectedException.cs" />
+    <Compile Include="Logging\CustomErrorHandlerServiceBehavior_T.cs" />
+    <Compile Include="Logging\DefaultLoggingErrorAdapter.cs" />
+    <Compile Include="Logging\ScheduledTimeEmailTraceListener.cs" />
+    <Compile Include="Logging\ScheduledTimeRollingFlatFileListener.cs" />
+    <Compile Include="Network\FtpRetryClient.cs" />
+    <Compile Include="Network\SocketErrorCodes.cs" />
+    <Compile Include="Dates\Day.cs" />
+    <Compile Include="Dates\DbConvert.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Email\Emailer.cs" />
+    <Compile Include="Exceptions\PebbleCodeException.cs" />
+    <Compile Include="Exceptions\UnexpectedException.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="IoC\BaseNinjectModule.cs" />
+    <Compile Include="IoC\Kernel.cs" />
+    <Compile Include="IoC\KernelConfigSection.csd.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>KernelConfigSection.csd</DependentUpon>
+    </Compile>
+    <Compile Include="Logging\Category.cs" />
+    <Compile Include="Logging\ConsoleTraceListener.cs" />
+    <Compile Include="Logging\DebugTraceListener.cs" />
+    <Compile Include="Logging\ExceptionDump.cs" />
+    <Compile Include="Logging\FileFormatter.cs" />
+    <Compile Include="Logging\iBatisLogger.cs" />
+    <Compile Include="Logging\LockStat.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogHelper.cs" />
+    <Compile Include="Logging\Profiler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Collections\MonitoredList.cs" />
+    <Compile Include="SystemInfo\SysInfo.cs" />
+    <Compile Include="Threading\DailyRepeatingTask.cs" />
+    <Compile Include="Threading\ThreadSafeKeyedMutex.cs" />
+    <Compile Include="Utilities\ArrayHelp.cs" />
+    <Compile Include="Utilities\AsyncState.cs" />
+    <Compile Include="Dates\DateUtils.cs" />
+    <Compile Include="Utilities\ComparisonUtils.cs" />
+    <Compile Include="Utilities\MathUtils.cs" />
+    <Compile Include="Network\Network.cs" />
+    <Compile Include="Data\PageInfo.cs" />
+    <Compile Include="Utilities\ReflectionUtils.cs" />
+    <Compile Include="Threading\RepeatingTask.cs" />
+    <Compile Include="Threading\RepeatingTaskContainer.cs" />
+    <Compile Include="Utilities\SaltedHash.cs" />
+    <Compile Include="Utilities\SecurityUtils.cs" />
+    <Compile Include="Utilities\SerialisationUtils.cs" />
+    <Compile Include="Threading\SimpleTask.cs" />
+    <Compile Include="Utilities\StringUtils.cs" />
+    <Compile Include="Utilities\UUEncoding.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="IoC\KernelConfigSection.csd">
+      <Generator>CsdFileGenerator</Generator>
+      <LastGenOutput>KernelConfigSection.csd.cs</LastGenOutput>
+    </None>
+    <None Include="IoC\KernelConfigSection.csd.config">
+      <DependentUpon>KernelConfigSection.csd</DependentUpon>
+    </None>
+    <None Include="IoC\KernelConfigSection.csd.xsd">
+      <DependentUpon>KernelConfigSection.csd</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Import Project="..\Common.Targets" />
+  <Import Project="..\Version.Targets" />
+</Project>

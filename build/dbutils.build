@@ -1,0 +1,439 @@
+<?xml version="1.0"?>
+<project name="dbutils" xmlns="http://nant.sf.net/release/0.90/nant.xsd">
+
+  <fail if="${not property::exists('trunk.dir')}" message="Set property 'trunk.dir' when using dbutils.build" />
+
+  <property name="sql.exec" value="sql-exec.bat"  />
+  <property name="db.dir" value="${trunk.dir}\db" unless="${property::exists('db.dir')}" />
+  <property name="sql.procs" value="${db.dir}\procs"  />
+  <property name="db.latestschema" value="${db.dir}\create_schema.sql"/>
+  <property name="sql.migration.dir" value="${db.dir}\migrations"  />
+  <property name="sql.tmpdir" value="${db.dir}\tmp"  />
+
+  <!-- 
+  ********************************************************
+  *** Updates the current schema dump file
+  ******************************************************** -->
+  <target name="db.dumpschema" depends="dump.environment">
+    
+    <exec program="mysqldump.exe" output="${db.latestschema}">
+      <arg value="--no-data" />
+      <arg value="--user=${db.user}" />
+      <arg value="--host=${db.host}" />
+      <arg value="--port=${db.port}" />
+      <arg value="--routines" />
+      <arg value="--create-options=TRUE" />
+      <arg value="--quote-names=FALSE" />
+      <arg unless="${string::get-length(db.password)==0}" value="-p${db.password}" />
+      <arg value="${db.name}" />
+    </exec>
+    
+  </target>
+  
+  <!-- 
+  ********************************************************
+  *** Backs up the database for the current environment, takes filename on command line
+  ******************************************************** -->
+  <target name="db.dump" depends="dump.environment">
+    
+    <echo message="Dumping ${db.name}"/>
+    
+    <tstamp property="dumptimestamp" pattern="yyyyMMdd_HHmmss" verbose="false" />
+    <property name="_dumpFile" value="${db.backup.dir}\${db.name}_${dumptimestamp}.sql"/>
+    <property name="_dumpZipFile" value="${_dumpFile}.zip"/>
+    
+    <if test="${not directory::exists(db.backup.dir)}">
+      <mkdir dir="${db.backup.dir}"/>
+    </if>
+    <exec program="mysqldump.exe" output="${_dumpFile}.tmp">
+      <arg value="--user=${db.user}" />
+      <arg value="--host=${db.host}" />
+      <arg value="--port=${db.port}" />
+      <arg value="--routines" />
+      <arg value="--create-options=TRUE" />
+      <arg value="--quote-names=FALSE" />
+      <arg value="--hex-blob=TRUE" />
+      <arg value="--flush-logs=TRUE" />
+      <arg value="--max_allowed_packet=1G" />
+      <arg unless="${string::get-length(db.password)==0}" value="-p${db.password}" />
+      <arg value="${db.name}" />
+    </exec>
+
+    <!--Regex replace if the pattern property exist-->
+    <if test="${property::exists('db.regex.replace.pattern')}">
+      <regexreplace
+        input-file="${_dumpFile}.tmp"
+        output-file="${_dumpFile}"
+        pattern="${db.regex.replace.pattern}"
+        replacement="" />
+    </if>
+    <!--Rename file if the pattern property is not exist-->
+    <if test="${not property::exists('db.regex.replace.pattern')}">
+      <move file="${_dumpFile}.tmp" tofile="${_dumpFile}"/>
+    </if>
+
+
+    <zip zipfile="${_dumpZipFile}" ziplevel="8">
+      <fileset>
+        <include name="${_dumpFile}"/>
+      </fileset>
+    </zip>
+    <delete file="${_dumpFile}.tmp" />
+    <delete file="${_dumpFile}" />
+    <echo message="Written db dump of ${db.name} to ${_dumpZipFile}"/>
+    
+  </target>
+
+  <!-- 
+  ********************************************************
+  *** Backs up the database for the current environment, takes filename on command line
+  ******************************************************** -->
+  <target name="db.truncatetable" description="Truncates transient data tables, usually in preparation for a backup" depends="dump.environment">
+    
+    <property name="sql.script.path" value="${db.dir}\truncate_transient_data.sql"  />
+    <call target="db.runschemafile"/>
+    
+  </target>
+
+  <!-- 
+  ********************************************************
+  *** Drop the current database and create new database with lastest production backup
+  *** db.production.backup.prefix property must be set on the main build file
+  ******************************************************** -->
+  <target name="db.restore" depends="dump.environment,db._cleanRunDir">
+    
+    <fail if="${environment == 'production'}" message="Cannot restore over production database"/>
+    
+    <property name="_mostRecentBackup" value="" />
+    <property name="_prodBackupSearchPattern" value="${db.backup.dir}\${db.production.backup.prefix}*.zip" />
+
+    <foreach item="File" property="filename">
+      <in>
+        <items>
+          <include name="${_prodBackupSearchPattern}" />
+        </items>
+      </in>
+      <do>
+        <property name="_mostRecentBackup" value="${filename}" />
+      </do>
+    </foreach>
+
+    <fail if="${_mostRecentBackup==''}" message="Failed to find production backup - expecting to find SQL backup file in ${_prodBackupSearchPattern}" />
+
+    <echo message="Restoring to ${db.name} from ${_mostRecentBackup}" />
+    <property name="_sqlScriptUnzipped" value="${string::replace(_mostRecentBackup,'.zip','')}" />
+
+    <unzip unless="${file::exists(path::combine(db.backup.dir,_sqlScriptUnzipped))}" zipfile="${_mostRecentBackup}" verbose="true" todir="${db.backup.dir}" />
+
+    <call target="db._recreateDatabase" />
+
+    <property name="sql.script" value="${_sqlScriptUnzipped}" />
+    <call target="db._expandAndExecSql" />
+    
+  </target>
+
+  <!-- 
+  ********************************************************
+  *** Migrate the specified schema to latest version
+  *** In order to run the post process the following must be defined in the main nant build file
+  *** 1) {db.postprocess.exe.path}, {solution.path} properties must be defined 
+  *** 2) "config.inject" target must be defined
+  ******************************************************** -->
+  <target name="db.migrate" depends="dump.environment">
+    
+    <property name="sql.src.dir" value="${sql.migration.dir}"/>
+    
+    <echo message="Running SQL migrations from ${sql.src.dir}" />
+    
+    <if test="${property::exists('db.postprocess.exe.path')}">
+      <property name="_configFileToProcess" value="${trunk.dir}\solution\App.config" overwrite="true"/>
+      <call target="config.inject" />
+
+      <property name="MSBuildPath" value="C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"/>
+      <echo message="Compiling solution..."/>
+      <exec program="${MSBuildPath}">
+        <arg line="/target:Build" />
+        <arg line="/verbosity:minimal" />
+        <arg line="/nologo" />
+        <arg line="/p:Configuration=Release"/>
+        <arg line="${solution.path}" />
+      </exec>
+    </if>
+    <echo message="Compilation Completed - Running migrations"/>
+    
+    <call target="db._runSqlFilesInDir" />
+
+    <call target="db.procs" />
+    <call target="db.views" />
+    <call target="db.triggers" />
+
+    <echo message="Post processing data..."/>
+    <if test="${property::exists('db.postprocess.exe.path')}">
+      <if test="${file::exists(db.postprocess.exe.path)}">
+        <exec program="${db.postprocess.exe.path}"
+              workingdir="${path::get-directory-name(db.postprocess.exe.path)}"
+              resultproperty="postprocresult" />
+        <echo message="${postprocresult}" />
+      </if>
+      <if test="${not file::exists(db.postprocess.exe.path)}">
+        <echo message="Skipped file missing ${db.postprocess.exe.path}"/>
+      </if>
+    </if>
+    <if test="${not property::exists('db.postprocess.exe.path')}">
+      <echo message="No db.postprocess.exe.path defined to run post process"/>
+    </if>
+    
+  </target>
+
+  <!--
+  ********************************************************
+  ***  Run (recreate) database procedures
+  ******************************************************** -->
+  <target name="db.procs" depends="dump.environment">
+    <property name="sql.src.dir" value="${db.dir}\procs"/>
+    <call target="db._runSqlFilesInDir" />
+  </target>
+
+  <!--
+  ********************************************************
+  ***  Run (recreate) database triggers
+  ******************************************************** -->
+  <target name="db.triggers" depends="dump.environment">
+    <property name="sql.src.dir" value="${db.dir}\triggers"/>
+    <call target="db._runSqlFilesInDir" />
+  </target>
+
+
+  <!--
+  ********************************************************
+  *** Run (recreate) database views
+  ******************************************************** -->
+  <target name="db.views" depends="dump.environment">
+    <property name="sql.src.dir" value="${db.dir}\views"/>
+    <call target="db._runSqlFilesInDir" />
+  </target>
+
+  <!--
+  ********************************************************
+  *** Creating new database migration file
+  ******************************************************** -->
+  <target name="db.createmigration" description="Creates a new migration template file">
+    
+    <fail if="${not property::exists('tools.dir')}" message="Set property 'tools.dir' when calling db.createmigration (on the main build file)" />
+    
+    <tstamp property="migrationtimestamp" pattern="yyyyMMddHHmmss" verbose="false" />
+    <property name="migrationname" value="${migrationtimestamp}" />
+    
+    <echo message="Creating migration file ${migrationname}"/>
+    
+    <copy   file="${tools.dir}\db\SqlTemplates\migration.sql.template"
+            tofile="${sql.migration.dir}\migration_${migrationname}.sql">
+      <filterchain>
+        <replacetokens>
+          <token key="MIGRATION_NUMBER" value="${migrationname}"  />
+        </replacetokens>
+      </filterchain>
+    </copy>
+    
+  </target>
+
+  <!--
+  ********************************************************
+  *** Replaces the token @db.name@ in the file specified 
+  *** by ${sql.script.path}, and runs into the database
+  *** Expected property {sql.script.path}
+  ******************************************************** -->
+  <target name="db.runschemafile" description="Creates the Database and tables" depends="dump.environment">
+
+    <fail if="${not property::exists('sql.script.path')}" message="Set property 'sql.script.path' when calling db.runschemafile" />
+
+    <property name="sql.script" value="${path::get-file-name(sql.script.path)}"/>
+
+    <call target="db._cleanRunDir" />
+    <copy   file="${sql.script.path}"
+            tofile="${sql.tmpdir}\${sql.script}.tmp"
+            overwrite="true">
+      <filterchain>
+        <replacetokens>
+          <token key="db.name" value="${db.name}" unless="${string::get-length(db.name)==0}" />
+          <token key="db.name" value="" if="${string::get-length(db.name)==0}" />
+        </replacetokens>
+      </filterchain>
+    </copy>
+
+    <!--Regex replace if the pattern property exist-->
+    <if test="${property::exists('db.regex.replace.pattern')}">
+      <regexreplace
+        input-file="${sql.tmpdir}\${sql.script}.tmp"
+        output-file="${sql.tmpdir}\${sql.script}"
+        pattern="${db.regex.replace.pattern}"
+        replacement="" />
+    </if>
+    <!--Rename file if the pattern property is not exist-->
+    <if test="${not property::exists('db.regex.replace.pattern')}">
+      <move file="${sql.tmpdir}\${sql.script}.tmp" tofile="${sql.tmpdir}\${sql.script}"/>
+    </if>
+
+    <call target="db._expandAndExecSql" />
+
+  </target>
+
+
+  <!-- 
+  ********************************************************
+  *** First check a valid environment has been specified
+  *** Can check this by looking for a property that gets set   
+  ******************************************************** -->
+
+  <target name="dump.environment">
+    <fail unless="${property::exists('db.host')}" message="Invalid environment ${environment} specified"></fail>
+    
+    <echo message="Running with environment configuration ${environment}:" />
+    <echo message="      db.host = ${db.host}" />
+    <echo message="      db.name = ${db.name}" />
+    <echo message="      db.port = ${db.port}" />
+    <echo message="      db.user = ${db.user}" />
+    <echo message="      db.compression = ${db.compression}" />
+
+  </target>
+
+
+  <!--
+  ********************************************************
+  ********************************************************
+
+  PRIVATE TARGETS
+
+  ********************************************************
+  ********************************************************
+  -->
+
+  <!--
+  ********************************************************
+  *** Burn existing files in run directory  
+  ******************************************************** -->
+  <target name="db._cleanRunDir">
+    
+    <delete includeemptydirs="true" failonerror="false">
+      <fileset basedir="${sql.tmpdir}">
+        <include name="**" />
+      </fileset>
+    </delete>
+    <mkdir dir="${sql.tmpdir}" failonerror="false" />
+    
+  </target>
+  
+  <!--
+  ********************************************************
+  *** Overwrite a .bat file to run in a specific SQL script file
+  *** and run the SQL against the database
+  *** Expected property {sql.script}
+  ******************************************************** -->
+  <target name="db._expandAndExecSql">
+    
+    <fail if="${not property::exists('sql.script')}" message="Set property 'sql.script' when calling db._expandAndExecSql" />
+    
+    <copy file="${sql.exec}.template" tofile="${sql.tmpdir}\${sql.exec}" overwrite="true">
+      <filterchain>
+        <replacetokens>
+          <token key="sql.script" value="${sql.script}"  />
+          <token key="db.name" value="${db.name}"  />
+          <token key="db.user" value="${db.user}"  />
+          <token key="db.port" value="${db.port}"  />
+          <token key="db.host" value="${db.host}"  />
+          <token key="db.password.cmdarg" value="--password=&quot;${db.password}&quot;" unless="${string::get-length(db.password)==0}" />
+          <token key="db.password.cmdarg" value="" if="${string::get-length(db.password)==0}" />
+        </replacetokens>
+      </filterchain>
+    </copy>
+    
+    <echo message="Ensure you have an existing database named ${db.name}"/>
+    <exec basedir="${sql.tmpdir}" program="${sql.exec}" workingdir="${sql.tmpdir}" />
+    
+  </target>
+
+  <!-- 
+  ********************************************************
+  *** Process migration templates
+  ******************************************************** -->
+  <target name="db._runSqlFilesInDir">
+    
+    <fail if="${not property::exists('sql.src.dir')}" message="Set property 'sql.src.dir' when calling db._runSqlFilesInDir" />
+    
+    <!-- Burn existing migrations in run directory -->
+    <call target="db._cleanRunDir" />
+
+    <!-- Copy all migration files into the run sub directory -->
+    <copy   todir="${sql.tmpdir}"
+            overwrite="true">
+      <fileset basedir="${sql.src.dir}">
+        <include name="**/*.sql" />
+      </fileset>
+      <filterchain>
+        <replacetokens>
+          <token key="db.name" value="${db.name}"  />
+        </replacetokens>
+      </filterchain>
+    </copy>
+
+    <!-- Now run all the files -->
+    <foreach item="File" property="sql.script">
+      <in>
+        <items basedir="${sql.tmpdir}">
+          <include name="**/*.sql" />
+        </items>
+      </in>
+      <do>
+        <echo message="${sql.script}" />
+        <echo message="Running SQL-Migration..."/>
+        <call target="db._expandAndExecSql" />
+      </do>
+    </foreach>
+
+  </target>
+  
+  <!--
+  ********************************************************
+  *** Drop and recreate database 
+  *** SQL for dropping and creating schmea must be in recreate_database.sql
+  ******************************************************** -->
+  <target name="db._recreateDatabase" description="Drop and create database" depends="dump.environment">
+    <property name="sql.script.path" value="${db.dir}\recreate_database.sql"  />
+    <call target="db.runschemafile"/>
+  </target>
+  
+  <target name="db.clean" >
+    <property name="sql.statement" value="DELETE FROM database_updates WHERE updated_at &lt; DATE_SUB(CURDATE(), INTERVAL 1 DAY); DELETE FROM recalcs WHERE finished_at &lt; DATE_SUB(CURDATE(), INTERVAL 10 DAY);" />
+    <call target="db._execMysqlStatement" />
+    <delete>
+      <fileset>
+        <include name="${db.backup.dir}\*" />
+        <exclude name="${db.backup.dir}\*.zip" />
+      </fileset>
+    </delete>
+    <foreach item="File" property="filename">
+      <in>
+        <items>
+          <include name="${db.backup.dir}\*" />
+        </items>
+      </in>
+      <do>
+        <if test="${timespan::get-days(datetime::now() - file::get-last-write-time(filename)) >= 30}">
+          <delete file="${filename}" />
+        </if>
+      </do>
+    </foreach>
+  </target>
+  
+  <target name="db._execMysqlStatement">
+    <fail if="${not property::exists('sql.statement')}" message="Set property 'sql.statement' when calling db._execMysqlStatement" />
+    <exec program="mysql.exe">
+      <arg value="--user=${db.user}" />
+      <arg value="--port=${db.port}" />
+      <arg value="--host=${db.host}" />
+      <arg value="--execute=&quot;${sql.statement}&quot;" />
+      <arg value="${db.name}" />
+    </exec>
+  </target>
+  
+</project>

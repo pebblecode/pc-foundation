@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SolutionDir Condition="'$(SolutionDir)' == '' OR '$(SolutionDir)' == '*Undefined*'">$(MSBuildProjectDirectory)\..\</SolutionDir>
+    <RepoDir Condition="'$(RepoDir)' == ''">$(MSBuildProjectDirectory)\..\..</RepoDir>
+    <MSBuildCommunityTasksPath>$(RepoDir)\solution\packages\MSBuildTasks.1.4.0.45\tools</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
+  <Target Name="CopyToSolutionPackageDir" AfterTargets="Compile" DependsOnTargets="Compile" Condition="'$(OutputType)' != 'WinExe'">
+    <PropertyGroup>
+      <SourceOutputDir>$(MSBuildProjectDirectory)\obj\$(Configuration)</SourceOutputDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <ProjOutputFile Include="$(SourceOutputDir)\*.dll;$(SourceOutputDir)\*.xml;$(SourceOutputDir)\*.pdb"/>
+    </ItemGroup>
+    <Copy SourceFiles="@(ProjOutputFile)"
+          DestinationFolder="$(SolutionDir)\obj\$(Configuration)" />
+  </Target>
+</Project>

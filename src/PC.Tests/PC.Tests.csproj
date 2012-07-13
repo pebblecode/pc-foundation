@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{79C2F702-E103-436E-ABBE-6EB6D262E2B8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PebbleCode.Tests</RootNamespace>
+    <AssemblyName>PC.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Tools|AnyCPU'">
+    <OutputPath>bin\Tools\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FSharp.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="IBatisNet.Common, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\iBatis\IBatisNet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="IBatisNet.DataMapper, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\iBatis\IBatisNet.DataMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=5.0.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Unity.Interception.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception.Configuration">
+      <HintPath>..\packages\Unity.Interception.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Interception.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MySql.Data.6.5.4\lib\net40\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.MockingKernel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.MockingKernel.3.0.0.5\lib\net40-full\Ninject.MockingKernel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.MockingKernel.Moq, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.MockingKernel.Moq.3.0.0.5\lib\net40-full\Ninject.MockingKernel.Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseIntegrationTest.cs" />
+    <Compile Include="BaseTest.cs" />
+    <Compile Include="Entities\TestUpdateContexts.cs" />
+    <Compile Include="Repository\DatabaseUpdateMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\EntityType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\Enums.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\Generated\ControlledUpdateThing.mygen.cs" />
+    <Compile Include="Entities\Generated\ControlledUpdateThingComparer.mygen.cs" />
+    <Compile Include="Entities\Generated\ControlledUpdateThingList.mygen.cs" />
+    <Compile Include="Entities\Generated\FieldTest.mygen.cs" />
+    <Compile Include="Entities\Generated\FieldTestComparer.mygen.cs" />
+    <Compile Include="Entities\Generated\FieldTestList.mygen.cs" />
+    <Compile Include="Entities\Generated\NodeBuilderTest.mygen.cs" />
+    <Compile Include="Entities\Generated\NodeBuilderTestComparer.mygen.cs" />
+    <Compile Include="Entities\Generated\NodeBuilderTestList.mygen.cs" />
+    <Compile Include="Entities\Generated\Thing.mygen.cs" />
+    <Compile Include="Entities\Generated\ThingComparer.mygen.cs" />
+    <Compile Include="Entities\Generated\ThingList.mygen.cs" />
+    <Compile Include="Entities\Generated\VersionedThing.mygen.cs" />
+    <Compile Include="Entities\Generated\VersionedThingComparer.mygen.cs" />
+    <Compile Include="Entities\Generated\VersionedThingList.mygen.cs" />
+    <Compile Include="Entities\Generated\Widget.mygen.cs" />
+    <Compile Include="Entities\Generated\WidgetComparer.mygen.cs" />
+    <Compile Include="Entities\Generated\WidgetList.mygen.cs" />
+    <Compile Include="Entities\ConcreteControlledUpdateEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\Handmade\ControlledUpdateThing.cs" />
+    <Compile Include="Entities\Handmade\ControlledUpdateThingList.cs" />
+    <Compile Include="Entities\Handmade\FieldTest.cs" />
+    <Compile Include="Entities\Handmade\FieldTestList.cs" />
+    <Compile Include="Entities\Handmade\NodeBuilderTest.cs" />
+    <Compile Include="Entities\Handmade\NodeBuilderTestList.cs" />
+    <Compile Include="Entities\Handmade\Thing.cs" />
+    <Compile Include="Entities\Handmade\ThingList.cs" />
+    <Compile Include="Entities\Handmade\VersionedThing.cs" />
+    <Compile Include="Entities\Handmade\VersionedThingList.cs" />
+    <Compile Include="Entities\Handmade\Widget.cs" />
+    <Compile Include="Entities\Handmade\WidgetList.cs" />
+    <Compile Include="Fakes\FakeEmailer.cs" />
+    <Compile Include="Repository\Generated\ControlledUpdateThingRepository.mygen.cs" />
+    <Compile Include="Repository\Generated\FieldTestRepository.mygen.cs" />
+    <Compile Include="Repository\Generated\NodeBuilderTestRepository.mygen.cs" />
+    <Compile Include="Repository\Generated\ThingRepository.mygen.cs" />
+    <Compile Include="Repository\Generated\VersionedThingRepository.mygen.cs" />
+    <Compile Include="Repository\Generated\WidgetRepository.mygen.cs" />
+    <Compile Include="Repository\Handmade\ControlledUpdateThingRepository.cs" />
+    <Compile Include="Repository\Handmade\FieldTestRepository.cs" />
+    <Compile Include="Repository\Handmade\NodeBuilderTestRepository.cs" />
+    <Compile Include="Repository\Handmade\ThingRepository.cs" />
+    <Compile Include="Repository\Handmade\VersionedThingRepository.cs" />
+    <Compile Include="Repository\Handmade\WidgetRepository.cs" />
+    <Compile Include="Repository\RepositoryNinjectModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestHelper.cs" />
+    <Compile Include="BaseUnitTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PC.Entities\PC.Entities.csproj">
+      <Project>{527A94D8-24D2-4670-B38B-A92B17757740}</Project>
+      <Name>PC.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PC.ExpressionTree\PC.ExpressionTree.fsproj">
+      <Project>{5F58A086-021D-411F-86B4-55A7FE8448DF}</Project>
+      <Name>PC.ExpressionTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PC.Framework\PC.Framework.csproj">
+      <Project>{A9047B13-8A1A-4262-A192-BC1D939A70F2}</Project>
+      <Name>PC.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PC.Repository\PC.Repository.csproj">
+      <Project>{FC2CBAB1-D526-46D8-84DF-DD0F87D5C0AF}</Project>
+      <Name>PC.Repository</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Repository\Maps\Config\sqlMapList.mygen.xml" />
+    <EmbeddedResource Include="Repository\Maps\Generated\ControlledUpdateThing.mygen.xml" />
+    <EmbeddedResource Include="Repository\Maps\Generated\FieldTest.mygen.xml" />
+    <EmbeddedResource Include="Repository\Maps\Generated\NodeBuilderTest.mygen.xml" />
+    <EmbeddedResource Include="Repository\Maps\Generated\Thing.mygen.xml" />
+    <EmbeddedResource Include="Repository\Maps\Generated\VersionedThing.mygen.xml" />
+    <EmbeddedResource Include="Repository\Maps\Generated\Widget.mygen.xml" />
+    <EmbeddedResource Include="Repository\Maps\Handmade\ControlledUpdateThing.xml" />
+    <EmbeddedResource Include="Repository\Maps\Handmade\FieldTest.xml" />
+    <EmbeddedResource Include="Repository\Maps\Handmade\NodeBuilderTest.xml" />
+    <EmbeddedResource Include="Repository\Maps\Handmade\Thing.xml" />
+    <EmbeddedResource Include="Repository\Maps\Handmade\VersionedThing.xml" />
+    <EmbeddedResource Include="Repository\Maps\Handmade\Widget.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Repository\Maps\Config\providers.config" />
+    <EmbeddedResource Include="Repository\Maps\Config\sqlMap.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>cd $(ProjectDir)\..\..\build
+nant -buildfile:pc.build unittest.prebuild</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Import Project="..\Common.Targets" />
+  <Import Project="..\Version.Targets" />
+</Project>

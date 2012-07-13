@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<project name="serviceutils" xmlns="http://nant.sf.net/release/0.90/nant.xsd">
+
+
+  <!-- install util folder -->
+  <property name="_installUtilBin" value="${environment::get-variable('SystemRoot')}\Microsoft.NET\Framework\v4.0.30319" />
+
+
+  <!-- 
+  *******************************************************
+  *** service.uninstall
+  *** Uninstalls a service based on a .net exe
+  *******************************************************
+	-->
+  <target name="service.uninstall" description="Uninstalls a service based on a .net exe">
+    <fail if="${not property::exists('service.dir')}" message="Set service.dir before callling service.uninstall" />
+    <fail if="${not property::exists('service.exe')}" message="Set service.exe before callling service.uninstall" />
+    <echo message="******************************************************" />
+    <echo message="Uninstalling service ${service.dir}\${service.exe}" />
+    <echo message="******************************************************" />
+    <property name="_installUtilArg" value="/u" />
+    <call target="internal.install_util" failonerror="true" />
+  </target>
+  
+  
+  <!-- 
+  *******************************************************
+  *** service.install
+  *** Installs a service based on a .net exe
+  *******************************************************
+	-->
+  <target name="service.install" description="Installs a service based on a .net exe">
+    <fail if="${not property::exists('service.dir')}" message="Set service.dir before callling service.install" />
+    <fail if="${not property::exists('service.exe')}" message="Set service.exe before callling service.install" />
+    <echo message="******************************************************" />
+    <echo message="Installing service ${service.dir}\${service.exe}" />
+    <echo message="******************************************************" />
+    <property name="_installUtilArg" value="/i" />
+    <call target="internal.install_util" failonerror="true" />
+  </target>
+  
+  
+  <!-- 
+  *******************************************************
+  *** internal.install_util
+  *** Installs or uninstalls a service
+  *******************************************************
+	-->
+  <target name="internal.install_util" description="Installs or uninstalls a service">
+    <fail if="${not property::exists('service.dir')}" message="Set service.dir before callling internal.install_util" />
+    <fail if="${not property::exists('service.exe')}" message="Set service.exe before callling internal.install_util" />
+    <fail if="${not property::exists('_installUtilBin')}" message="Set _installUtilBin before callling internal.install_util" />
+    <fail if="${not property::exists('_installUtilArg')}" message="Set _installUtilArg before callling internal.install_util" />
+    <exec program="InstallUtil" basedir="${_installUtilBin}" failonerror="false" workingdir="${service.dir}" commandline="/environment=${environment} ${_installUtilArg} ${service.dir}\${service.exe}">
+    </exec>
+  </target>  
+  
+  
+  <!-- 
+  *******************************************************
+  *** service.stop
+  *** Stops a named service
+  *******************************************************
+	-->
+  <target name="service.stop" description="Stops a named service">
+    <fail if="${not property::exists('service.name')}" message="Set service.name before callling service.stop" />
+    <echo message="******************************************************" />
+    <echo message="Stopping service ${service.name}" />
+    <echo message="******************************************************" />
+    <exec program="net" failonerror="false">
+      <arg value="stop" />
+      <arg value="${service.name}" />
+    </exec>
+  </target>
+  
+  
+  <!-- 
+  *******************************************************
+  *** service.start
+  *** Starts a named service
+  *******************************************************
+	-->
+  <target name="service.start" description="Stara a named service">
+    <fail if="${not property::exists('service.name')}" message="Set service.name before callling service.start" />
+    <echo message="******************************************************" />
+    <echo message="Starting service ${service.name}" />
+    <echo message="******************************************************" />
+    <exec program="net" failonerror="false">
+      <arg value="start" />
+      <arg value="${service.name}" />
+    </exec>
+  </target>
+
+</project>

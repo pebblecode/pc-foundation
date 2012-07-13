@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+
+<project name="PebbleCode Build Tasks" default="usage" xmlns="http://nant.sf.net/schemas/nant.xsd">
+
+  <!-- 
+  *******************************************************
+  *** LOAD ADDITIONAL TASKS
+  *******************************************************
+	-->
+  <loadtasks assembly=".\lib\NAnt.Contrib.Tasks.dll" />
+  <loadtasks assembly=".\lib\PC.NantTasks.dll" />
+
+  <!-- 
+  *******************************************************
+  *** Environment (e.g. Staging, Production, Test, Dev)
+  *******************************************************
+	-->
+  <!-- Set this on the command line to override development environment: -D:environment=XXXXXX -->
+  <property name="environment" value="development" overwrite="false" />
+
+  <property name="_defaultPropertiesFile" value="..\local.root.properties" />
+  <if test="${not file::exists(_defaultPropertiesFile)}">
+    <property name="_defaultPropertiesFile" value="P:\local.root.properties" />
+  </if>
+
+  <include buildfile="${_defaultPropertiesFile}" failonerror="true" if="${string::to-lower(environment)=='development'}" />
+  <include buildfile=".\environments\${environment}.properties" failonerror="true" unless="${string::to-lower(environment)=='development'}" />
+
+  <!-- 
+  *******************************************************
+  *** SET UP INITIAL PROPERTY VALUES
+  *******************************************************
+	-->
+
+  <property name="trunk.dir" value="P:" overwrite="false" />   <!-- Trunk Directory will get overridden by some environments -->
+
+  <!-- include utils files -->
+  <property name="utilsdir" value="" overwrite="false" />
+  <include buildfile="svnutils.build"/>
+  <include buildfile="dbutils.build"/>
+  <include buildfile="serviceutils.build"/>
+
+  <!-- config defaults -->
+  <property name="db.host" value="localhost" readonly="false" overwrite="false" />
+  <property name="db.port" value="3400" readonly="false" overwrite="false" />
+  <property name="db.name" value="pc" readonly="false" overwrite="false" />
+  <property name="db.user" value="root" readonly="false" overwrite="false" />
+  <property name="db.password" value="" overwrite="false" />
+  <property name="db.compression" value="false" readonly="false" overwrite="false" />
+  
+  <property name="mygen.programdir" value="C:\Program Files (x86)\MyGeneration13" readonly="false" overwrite="false" />
+
+  <!-- 
+  *******************************************************
+  *** CONFIG.DUMP
+  *** 
+  *** Writes all current config settings to the console
+  *******************************************************
+	-->
+  <target name="config.dump">
+    <echo message="db.host: ${db.host}" />
+    <echo message="db.port: ${db.port}" />
+    <echo message="db.name: ${db.name}" />
+    <echo message="db.user: ${db.user}" />
+    <echo message="db.password: ${db.password}" />
+    <echo message="db.compression: ${db.compression}" />
+  </target>
+
+
+  <!-- 
+  *******************************************************
+  *** USAGE
+  *** 
+  *** Prints a message regarding the usage of the nant script
+  *******************************************************
+	-->
+  <target name="usage">
+    <echo message="Usage: nant [-d:environment=&lt;environment&gt;] &lt;target1&gt; &lt;target2&gt; ..."/>
+    <echo message="   " />
+    <echo message="where target is:" />
+    <echo message="   unittest.prebuild - setup MyGen for PebbleCode, gen code, return MyGen to how it was" />
+    <echo message="   " />
+    <echo message="   config.dump - output settings for current environment" />
+    <echo message="   " />
+    <echo message="and environment can be"/>
+    <echo message="   development - local developer settings (default)" />
+  </target>
+
+  <!-- 
+  *******************************************************
+  *** UNITTEST.PREBUILD
+  *** 
+  *** Uses MyGen to prepare the unit test code for building base on the latest templates and PC database
+  *** 1) Check MyGen not currently running.
+  *** 2) Back up existing MyGen settings. 
+  *** 3) Update pc database with latest schema 
+  *** 4) Inject db settings into MyGen prject file.
+  *** 5) Inject db settings in MyGen settings file.
+  *** 6) Run MyGen to generate code.
+  *** 7) Put existing settings back so developer can continue with SGP or Contrarius MyGen.
+  ***
+  *** onfailure in 4 to 6: run step 7.
+  *** 
+  *******************************************************
+  -->
+  <target name="unittest.prebuild">
+
+    <fail if="${not property::exists('mygen.programdir')}" message="Set mygen.programdir before calling unittest.prebuild" />
+    
+    <property name="_rootDir" value="${directory::get-parent-directory(directory::get-current-directory())}" />
+    
+    <property name="mygen.settingsfile" value="${mygen.programdir}\Settings\DefaultSettings.xml" />
+    <property name="mygen.settingsbackup" value="${mygen.settingsfile}.bak" />
+    <property name="mygen.projectfile.template" value="${_rootDir}\db\pc_test.zprj" />
+    <property name="mygen.projectfile" value="${_rootDir}\db\pc_test.temp.zprj" />
+    <property name="mygen.logfile" value="${mygen.projectfile.template}.log" />
+    <property name="mygen.db" value="Database=${db.name};Data Source=${db.host};port=${db.port};User Id=${db.user};Password=${db.password}" />
+    <property name="mygen.zeus" value="${mygen.programdir}\ZeusCmd.exe" />
+
+    <fail if="${not file::exists(mygen.projectfile.template)}" message="Mygen project file template is not found ${mygen.projectfile.template}" />
+
+    <!-- 1) Check MyGen not currently running. -->
+    <isrunning processname="MyGeneration" failonerror="true" />
+    <fail if="${pc.isrunning.result=='true'}" message="MyGeneration is running. Please exit MyGeneration first" />
+    
+    <!-- 2) Back up existing MyGen settings.  -->
+    <copy file="${mygen.settingsfile}" tofile="${mygen.settingsbackup}" overwrite="true" />
+    
+    <!-- 3) Update pc database with latest schema -->
+    <exec program="mysql" >
+      <arg value="--host=${db.host}" />
+      <arg value="--port=${db.port}" />
+      <arg value="--user=${db.user}" />
+      <arg value="--password=${db.password}" />
+      <arg value="-e" /><arg value="source ${_rootDir}\db\scripts\schema.sql" />
+    </exec>
+    
+    <trycatch>
+      <try>
+        <!-- 4) Inject db settings into MyGen project file. -->
+        <copy   file="${mygen.projectfile.template}"
+            tofile="${mygen.projectfile}">
+          <filterchain>
+            <replacetokens>
+              <token key="base.dir" value="${_rootDir}"  />
+            </replacetokens>
+          </filterchain>
+        </copy>
+        <xmlpoke value="${mygen.db}" xpath="//item[@name='__dbConnectionString']/@val" file="${mygen.projectfile}" failonerror="true" />
+        
+        <!-- 5) Inject db settings in MyGen settings file. -->
+        <!--<xmlpoke value="${mygen.db}" xpath="/DefaultSettings/Setting[@Name='ConnectionString']/@value" file="${mygen.settingsfile}" failonerror="true" />-->
+        <!--<xmlpoke value="${mygen.db}" xpath="/DefaultSettings/Setting[@Name='PC_TEST']/@value" file="${mygen.settingsfile}" failonerror="true" />
+        <xmlpoke value="${mygen.db}" xpath="/DefaultSettings/SavedSettings[@name='PC_TEST']/@connstr" file="${mygen.settingsfile}" failonerror="true" />-->
+        
+        <!-- 6) Run MyGen to generate code. -->
+        <delete file="${mygen.logfile}" failonerror="true" />
+        <exec program="${mygen.zeus}">
+          <arg value="-l" /><arg value="${mygen.logfile}" />
+          <arg value="-p" /><arg value="${mygen.projectfile}" />
+        </exec>
+        <fail unless="${file::exists(mygen.logfile)}" message="MyGen log file missing. MyGen failure." />
+        <foreach item="Line" in="${mygen.logfile}" property="logline" trim="Both">
+          <fail if="${string::contains(string::to-lower(logline), 'error')}" message="Error in MyGen: ${logline}" />
+        </foreach>
+        
+      </try>
+      <finally>
+        <!-- onfailure in 4 to 6: run step 7. -->
+        <!-- 7) Put existing settings back so developer can continue with SGP or Contrarius MyGen. -->
+        <echo message="Reverting MyGen to original settings" />
+        <copy file="${mygen.settingsbackup}" tofile="${mygen.settingsfile}" overwrite="true" />
+        <if test="${file::exists(mygen.projectfile)}">
+          <delete file="${mygen.projectfile}" />
+        </if>
+      </finally>
+    </trycatch>
+    
+  </target>
+
+
+</project>

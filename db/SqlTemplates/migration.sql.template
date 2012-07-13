@@ -1,0 +1,39 @@
+use @db.name@;
+
+
+DROP PROCEDURE IF EXISTS migration_proc;
+delimiter $$
+CREATE PROCEDURE migration_proc()
+migration:BEGIN
+
+  -- **********************************************************************
+  -- *** 
+  -- ***  1. CHANGE THIS TO MATCH THE FILE'S MIGRATION NUMBER
+  -- *** 
+  -- **********************************************************************
+  DECLARE MIGRATION_NUMBER DECIMAL(14,0) DEFAULT @MIGRATION_NUMBER@;
+
+  DECLARE v_times_migrated INT;
+  SELECT COUNT(*) INTO v_times_migrated FROM database_versions WHERE version_no = MIGRATION_NUMBER;
+  IF v_times_migrated > 0 THEN LEAVE migration; END IF;
+
+  -- **********************************************************************
+  -- *** 
+  -- ***  2. ADD MIGRATION CODE BELOW THIS  
+  -- *** 
+  -- **********************************************************************
+
+XXXXXXXXXXXXXXX
+
+  -- **********************************************************************
+  -- *** 
+  -- ***  ADD MIGRATION CODE ABOVE THIS ^^^^^^^^^^^^^^^^^^
+  -- *** 
+  -- **********************************************************************
+
+  INSERT INTO database_versions (version_no, applied_on, post_proc_applied) values (MIGRATION_NUMBER, NOW(), 0);
+
+END migration;
+$$
+call migration_proc;
+DROP PROCEDURE migration_proc;
