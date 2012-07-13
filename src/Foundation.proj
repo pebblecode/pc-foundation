@@ -4,17 +4,13 @@
     <Configuration Condition="'$(Configuration)'==''" >Release</Configuration>
     <BuildDir>$(BaseDir)\build</BuildDir>
     <PackageDir>$(BaseDir)\obj\$(Configuration)</PackageDir>
-    <SolutionFile>$(BaseDir)\Foundation.sln</SolutionFile> 
+    <SolutionFile>$(BaseDir)\Foundation.sln</SolutionFile>
   </PropertyGroup>
   
   <Target Name="default" DependsOnTargets="Compile; Package" />
  
   <Target Name="Compile">
     <MSBuild Projects="$(SolutionFile)" Properties="Configuration=$(Configuration)"  />
-  </Target>
- 
-  <Target Name="Package2" DependsOnTargets="LoadAssemblyVersion">
-	<Message Text="$(AssemblyVersion)" />
   </Target>
   
   <Target Name="Package" DependsOnTargets="LoadAssemblyVersion">

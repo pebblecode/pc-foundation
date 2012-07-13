@@ -15,8 +15,21 @@
     <ItemGroup>
       <ProjOutputFile Include="$(SourceOutputDir)\*.dll;$(SourceOutputDir)\*.xml;$(SourceOutputDir)\*.pdb"/>
     </ItemGroup>
+    <ItemGroup>
+      <ToolsOutputFile Include="$(RepoDir)\utils\*.exe"/>
+    </ItemGroup>
+    <ItemGroup>
+      <ContentOutputFile Include="$(RepoDir)\build\**\*"/>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjOutputFile Include="$(SourceOutputDir)\*.dll;$(SourceOutputDir)\*.xml;$(SourceOutputDir)\*.pdb"/>
+    </ItemGroup>
     <Copy SourceFiles="@(ProjOutputFile)"
           DestinationFolder="$(SolutionDir)\obj\$(Configuration)\lib" />
+    <Copy SourceFiles="$(ToolsOutputFile)"
+          DestinationFolder="$(SolutionDir)\obj\$(Configuration)\tools" />
+    <Copy SourceFiles="@(ContentOutputFile)"
+          DestinationFolder="$(SolutionDir)\obj\$(Configuration)\content" />
   </Target>
   
 </Project>

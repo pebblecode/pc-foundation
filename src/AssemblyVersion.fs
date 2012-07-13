@@ -15,6 +15,6 @@ open System.Reflection
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 
-[<assembly: AssemblyVersion("4.1.0.2")>]
-[<assembly: AssemblyFileVersion("4.1.0.2")>]
+[<assembly: AssemblyVersion("4.1.0.3")>]
+[<assembly: AssemblyFileVersion("4.1.0.3")>]
 do()
