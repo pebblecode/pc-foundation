@@ -2,12 +2,22 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <BaseDir Condition="'$(BaseDir)' == ''">$(ProjectDir)\..</BaseDir>
+	<MSBuildCommunityTasksPath>$(BaseDir)\packages\MSBuildTasks.1.4.0.45\tools</MSBuildCommunityTasksPath>
   </PropertyGroup>
   
   <Target Name="LoadAssemblyVersion" Outputs="$(AssemblyVersion)" DependsOnTargets="LoadMajorAssemblyVersion">
+	<!-- 
     <SvnVersion LocalPath="$(BaseDir)" ToolPath="C:\Program Files\SlikSvn\bin">
       <Output TaskParameter="Revision" PropertyName="AssemblyVersionRevision" />
     </SvnVersion>
+	-->
+	
+    <GitVersion Path="master">
+      <Output PropertyName="AssemblyVersionRevision" TaskParameter="CommitCount" />
+    </GitVersion>
+    <Message Text="Commit count: $(AssemblyVersionRevision)"/>
+    <Message Text="Package Version: $(MajorAssemblyVersion).$(AssemblyVersionRevision)"/>
+	
     <PropertyGroup>
       <AssemblyVersion>$(MajorAssemblyVersion).$(AssemblyVersionRevision)</AssemblyVersion>
     </PropertyGroup>
@@ -50,4 +60,53 @@
       </Compile>
     </ItemGroup>
   </Target>
+  
+  <UsingTask TaskName="GitVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <LocalPath ParameterType="System.String" />
+      <Path ParameterType="System.String" />
+      <CommitCount ParameterType="System.Int32" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <!--<Reference Include="" />-->
+      <Using Namespace="System"/>
+      <Using Namespace="System.Diagnostics"/>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+          LocalPath = LocalPath ?? ".";
+          Path = Path ?? "master";
+          
+          Log.LogMessage(MessageImportance.Low, "LocalPath is {0}", LocalPath);
+          Log.LogMessage(MessageImportance.Low, "Path is {0}", Path);
+          
+          var psi = new ProcessStartInfo("cmd", "/c git rev-list " + Path + " --count") {
+              UseShellExecute = false, 
+              ErrorDialog = false, 
+              CreateNoWindow = false, 
+              WorkingDirectory = LocalPath,
+              RedirectStandardOutput = true,
+              RedirectStandardError = true
+          };
+
+          string result;
+          using (var p = Process.Start(psi)) {
+            p.WaitForExit();
+            if (p.ExitCode != 0) {
+              using (var standardError = p.StandardError) {
+                Log.LogError(standardError.ReadToEnd());
+              }
+              return false;
+            }
+
+            using (var standardOutput = p.StandardOutput) {
+              CommitCount = Int32.Parse(standardOutput.ReadToEnd());
+            }
+          }
+]]>
+      </Code>
+    </Task>
+  </UsingTask>  
+
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
+
 </Project>

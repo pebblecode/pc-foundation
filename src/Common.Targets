@@ -3,9 +3,11 @@
   <PropertyGroup>
     <SolutionDir Condition="'$(SolutionDir)' == '' OR '$(SolutionDir)' == '*Undefined*'">$(MSBuildProjectDirectory)\..\</SolutionDir>
     <RepoDir Condition="'$(RepoDir)' == ''">$(MSBuildProjectDirectory)\..\..</RepoDir>
-    <MSBuildCommunityTasksPath>$(RepoDir)\solution\packages\MSBuildTasks.1.4.0.45\tools</MSBuildCommunityTasksPath>
+    <MSBuildCommunityTasksPath>$(RepoDir)\src\packages\MSBuildTasks.1.4.0.45\tools</MSBuildCommunityTasksPath>
   </PropertyGroup>
+  
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
+  
   <Target Name="CopyToSolutionPackageDir" AfterTargets="Compile" DependsOnTargets="Compile" Condition="'$(OutputType)' != 'WinExe'">
     <PropertyGroup>
       <SourceOutputDir>$(MSBuildProjectDirectory)\obj\$(Configuration)</SourceOutputDir>
@@ -16,4 +18,5 @@
     <Copy SourceFiles="@(ProjOutputFile)"
           DestinationFolder="$(SolutionDir)\obj\$(Configuration)" />
   </Target>
+  
 </Project>
