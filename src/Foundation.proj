@@ -14,20 +14,19 @@
   </Target>
   
   <Target Name="Package" DependsOnTargets="LoadAssemblyVersion">
-	<Message Text="$(AssemblyVersion)" />
-  
+	<Message Text="Packaging version $(AssemblyVersion)" />
+ 
+
     <ItemGroup>
-      <MainBinaries Include="$(BaseDir)\obj\$(Configuration)***.*" />
+      <BuildContent Include="$(BaseDir)\..\Build\**\*.*" />
     </ItemGroup>
- 
-    <!-- First copy the nuspec template files to the package dir -->
+	
+	<!-- Copy the build directory from solution source to the nuspec output directory -->
+    <Copy SourceFiles="@(BuildContent)" DestinationFiles="@(BuildContent->'$(PackageDir)\Content\Build\%(RecursiveDir)%(Filename)%(Extension)')" />
+	
+    <!-- Copy the nuspec template files to the package dir -->
     <Copy SourceFiles="$(MSBuildProjectDirectory)\PebbleCode.Foundation.nuspec" DestinationFolder="$(PackageDir)" />
- 
-    <!-- Copy the binaries to the package dir -->
-    <!-- <Copy SourceFiles="@(MainBinaries)" DestinationFolder="$(PackageDir)\%(RecursiveDir)" /> -->
- 
-    <!-- Get the version number of the main FV assembly to insert into the nuspec files -->
-    
+     
     <!-- insert the version number into the nuspec files -->
     <XmlUpdate
       Namespace="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"

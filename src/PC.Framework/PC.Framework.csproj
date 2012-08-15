@@ -45,7 +45,10 @@
     <OutputPath>bin\Tools\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FSharp.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="FSharp.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\FSharp.Core.4.0.0\lib\FSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="IBatisNet.Common, Version=1.6.2.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
       <HintPath>..\..\lib\iBatis\IBatisNet.Common.dll</HintPath>
     </Reference>
@@ -78,6 +81,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject.MockingKernel">
+      <HintPath>..\packages\Ninject.MockingKernel.3.0.0.5\lib\net40-full\Ninject.MockingKernel.dll</HintPath>
+    </Reference>
     <Reference Include="Starksoft.Net.Ftp, Version=1.0.158.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\StarkSoftFtp\Starksoft.Net.Ftp.dll</HintPath>
     </Reference>
@@ -104,13 +110,15 @@
     <Compile Include="Configuration\DatabaseSettings.cs" />
     <Compile Include="Configuration\FtpSettings.cs" />
     <Compile Include="Configuration\ProfilerSettings.cs" />
-    <Compile Include="Configuration\MailSettings.cs" />
+    <Compile Include="Configuration\EmailSettings.cs" />
     <Compile Include="Data\Param.cs" />
     <Compile Include="Dependancy\Resolver.cs" />
     <Compile Include="Email\IEmailer.cs" />
+    <Compile Include="EnumHelpers.cs" />
     <Compile Include="FrameworkModule.cs" />
     <Compile Include="IoC\InjectAttribute.cs" />
     <Compile Include="Exceptions\ExpectedException.cs" />
+    <Compile Include="IoC\NinjectMoqExtensions.cs" />
     <Compile Include="Logging\CustomErrorHandlerServiceBehavior_T.cs" />
     <Compile Include="Logging\DefaultLoggingErrorAdapter.cs" />
     <Compile Include="Logging\ScheduledTimeEmailTraceListener.cs" />

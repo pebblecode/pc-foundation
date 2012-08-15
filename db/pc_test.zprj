@@ -44,13 +44,13 @@
         <item name="dbDriver" type="System.String" val="MYSQL2" />
         <item name="defaultOutputPath" type="System.String" val="C:\Program Files\MyGeneration13\GeneratedCode\" />
         <item name="defaultTemplatePath" type="System.String" val="@base.dir@\db\MyGeneration\Templates" />
-        <item name="outputPath_cls" type="System.String" val="@base.dir@\solution\PC.Tests\Entities\Generated" />
-        <item name="outputPath_cmp" type="System.String" val="@base.dir@\solution\PC.Tests\Entities\Generated" />
-        <item name="outputPath_int" type="System.String" val="@base.dir@\solution\PC.Tests\Repository\Generated" />
-        <item name="outputPath_lst" type="System.String" val="@base.dir@\solution\PC.Tests\Entities\Generated" />
-        <item name="outputPath_rep" type="System.String" val="@base.dir@\solution\PC.Tests\Repository\Generated" />
-        <item name="outputPath_trg" type="System.String" val="@base.dir@\solution\PC.Tests\Triggers" />
-        <item name="outputPath_xml" type="System.String" val="@base.dir@\solution\PC.Tests\Repository\Maps\Generated" />
+        <item name="outputPath_cls" type="System.String" val="@base.dir@\src\PC.Tests\Entities\Generated" />
+        <item name="outputPath_cmp" type="System.String" val="@base.dir@\src\PC.Tests\Entities\Generated" />
+        <item name="outputPath_int" type="System.String" val="@base.dir@\src\PC.Tests\Repository\Generated" />
+        <item name="outputPath_lst" type="System.String" val="@base.dir@\src\PC.Tests\Entities\Generated" />
+        <item name="outputPath_rep" type="System.String" val="@base.dir@\src\PC.Tests\Repository\Generated" />
+        <item name="outputPath_trg" type="System.String" val="@base.dir@\src\PC.Tests\Triggers" />
+        <item name="outputPath_xml" type="System.String" val="@base.dir@\src\PC.Tests\Repository\Maps\Generated" />
         <item name="rootNamespace" type="System.String" val="PebbleCode" />
         <item name="selectPath_cls" type="System.String" val="" />
         <item name="selectPath_cmp" type="System.String" val="" />

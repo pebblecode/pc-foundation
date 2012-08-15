@@ -26,8 +26,8 @@ namespace PebbleCode.Tests.Repository
             //Mock each of the repositories
             Assembly repos = Assembly.Load("PC.Tests");
             repos.GetTypes()
-                .Where(type => typeof(EntityRepository).IsAssignableFrom(type) && !type.IsAbstract)
-                .ForEach(repoType => Bind(repoType).ToMock().InSingletonScope());
+                .Where(type => typeof (EntityRepository).IsAssignableFrom(type) && !type.IsAbstract)
+                .ForEach(repoType => Bind(repoType).ToMockSingleton());
         }
     }
 }

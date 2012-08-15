@@ -8,28 +8,22 @@
   
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
   
-  <Target Name="CopyToSolutionPackageDir" AfterTargets="Compile" DependsOnTargets="Compile" Condition="'$(OutputType)' != 'WinExe'">
+  <Target Name="CopyToSolutionPackageDir" AfterTargets="Compile" DependsOnTargets="Compile">
+	<Message Text="$(MSBuildProjectDirectory)" />
     <PropertyGroup>
       <SourceOutputDir>$(MSBuildProjectDirectory)\obj\$(Configuration)</SourceOutputDir>
     </PropertyGroup>
-    <ItemGroup>
-      <ProjOutputFile Include="$(SourceOutputDir)\*.dll;$(SourceOutputDir)\*.xml;$(SourceOutputDir)\*.pdb"/>
-    </ItemGroup>
-    <ItemGroup>
-      <ToolsOutputFile Include="$(RepoDir)\utils\*.exe"/>
-    </ItemGroup>
-    <ItemGroup>
-      <ContentOutputFile Include="$(RepoDir)\build\**\*"/>
-    </ItemGroup>
-    <ItemGroup>
-      <ProjOutputFile Include="$(SourceOutputDir)\*.dll;$(SourceOutputDir)\*.xml;$(SourceOutputDir)\*.pdb"/>
-    </ItemGroup>
-    <Copy SourceFiles="@(ProjOutputFile)"
-          DestinationFolder="$(SolutionDir)\obj\$(Configuration)\lib" />
-    <Copy SourceFiles="$(ToolsOutputFile)"
-          DestinationFolder="$(SolutionDir)\obj\$(Configuration)\tools" />
-    <Copy SourceFiles="@(ContentOutputFile)"
-          DestinationFolder="$(SolutionDir)\obj\$(Configuration)\content" />
+			
+	<ItemGroup>
+		<ProjOutputFile Include="$(SourceOutputDir)\*.dll;$(SourceOutputDir)\*.xml;$(SourceOutputDir)\*.pdb" Condition="'$(OutputType)' != 'WinExe'" />
+		<ProjOutputFile Include="$(SourceOutputDir)\*.exe;$(SourceOutputDir)\*.pdb" Condition="'$(OutputType)' == 'WinExe'" />
+	</ItemGroup>
+	
+	<Copy SourceFiles="@(ProjOutputFile)"
+		  DestinationFolder="$(SolutionDir)\obj\$(Configuration)\lib" Condition="'$(OutputType)' != 'WinExe'" />
+	<Copy SourceFiles="@(ProjOutputFile)"
+		  DestinationFolder="$(SolutionDir)\obj\$(Configuration)\tools" Condition="'$(OutputType)' == 'WinExe'" />
+	
   </Target>
   
 </Project>

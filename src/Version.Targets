@@ -79,16 +79,16 @@
           Log.LogMessage(MessageImportance.Low, "LocalPath is {0}", LocalPath);
           Log.LogMessage(MessageImportance.Low, "Path is {0}", Path);
           
-          var psi = new ProcessStartInfo("cmd", "/c git rev-list " + Path + " --count") {
+          var psi = new ProcessStartInfo("git", "rev-list " + Path + " --count") {
+			  WindowStyle = ProcessWindowStyle.Hidden,
               UseShellExecute = false, 
               ErrorDialog = false, 
-              CreateNoWindow = false, 
+              CreateNoWindow = true, 
               WorkingDirectory = LocalPath,
               RedirectStandardOutput = true,
               RedirectStandardError = true
           };
 
-          string result;
           using (var p = Process.Start(psi)) {
             p.WaitForExit();
             if (p.ExitCode != 0) {
