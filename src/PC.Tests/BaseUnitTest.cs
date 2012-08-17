@@ -194,10 +194,12 @@ namespace PebbleCode.Tests
                             ParameterExpression i = Expression.Parameter(typeof(int));
                             ConstantExpression value = Expression.Constant(entityToReturn.Identity);
                             MethodCallExpression idEqualsBody = Expression.Call(i, "Equals", null, value);
-                            var idEqualsParam = Expression.Lambda<Predicate<int>>(idEqualsBody, i);
+                            
+                            //Older version of Moq
+                            //var idEqualsParam = Expression.Lambda<Predicate<int>>(idEqualsBody, i);
 
-                            //When upgrading Moq, swap the above for this, more consistent use of Func delegate type in place of deprecated Predicate
-                            //var idEqualsParam = Expression.Lambda<Func<int, bool>>(idEqualsBody, i);
+                            //Newer version of Moq, swap the above for this, more consistent use of Func delegate type in place of deprecated Predicate
+                            var idEqualsParam = Expression.Lambda<Func<int, bool>>(idEqualsBody, i);
                             
                             arguments.Add(Expression.Call(typeof(It), "Is", new Type[] { pi.ParameterType }, idEqualsParam));
                         }
