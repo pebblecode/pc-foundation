@@ -12,14 +12,17 @@
     </SvnVersion>
 	-->
 	
-    <GitVersion Path="master">
+    <GitVersion Path="master" Condition="$(CommandLineVersionNumber)==''">
       <Output PropertyName="AssemblyVersionRevision" TaskParameter="CommitCount" />
     </GitVersion>
     <Message Text="Commit count: $(AssemblyVersionRevision)"/>
     <Message Text="Package Version: $(MajorAssemblyVersion).$(AssemblyVersionRevision)"/>
 	
-    <PropertyGroup>
+    <PropertyGroup Condition="$(CommandLineVersionNumber)==''">
       <AssemblyVersion>$(MajorAssemblyVersion).$(AssemblyVersionRevision)</AssemblyVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="$(CommandLineVersionNumber)!=''">
+      <AssemblyVersion>$(CommandLineVersionNumber)</AssemblyVersion>
     </PropertyGroup>
   </Target>
 
@@ -29,11 +32,7 @@
       <Output TaskParameter="Minor" PropertyName="AssemblyVersionMinor" />
       <Output TaskParameter="Build" PropertyName="AssemblyVersionRevision" />
     </Version>
-    <PropertyGroup Condition="$(CommandLineVersionNumber)!=''">
-      <!-- <MajorAssemblyVersion>$(AssemblyVersionMajor).$(AssemblyVersionMinor).$(AssemblyVersionRevision)</MajorAssemblyVersion> -->
-	  <MajorAssemblyVersion>$(CommandLineVersionNumber)</MajorAssemblyVersion>
-    </PropertyGroup>
-    <PropertyGroup Condition="$(CommandLineVersionNumber)==''">
+    <PropertyGroup>
       <MajorAssemblyVersion>$(AssemblyVersionMajor).$(AssemblyVersionMinor).$(AssemblyVersionRevision)</MajorAssemblyVersion>
     </PropertyGroup>
   </Target>
