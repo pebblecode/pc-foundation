@@ -20,11 +20,11 @@
 	</dependencies>
   </metadata>
   <files>
-	  <file src="PC.Entities\bin\Release\*.dll" target="lib" /> 
-	  <file src="PC.ExpressionCalculator\bin\Release\*.dll" target="lib" /> 
-	  <file src="PC.ExpressionTree\bin\Release\*.dll" target="lib" /> 
-	  <file src="PC.Framework\bin\Release\*.dll" target="lib" /> 
-	  <file src="PC.Repository\bin\Release\*.dll" target="lib" /> 
-	  <file src="..\lib\iBatis\*.dll" target="lib" /> 
+	  <file src="PC.Entities\bin\Release\PC.Entities.dll" target="lib\net40" /> 
+	  <file src="PC.ExpressionCalculator\bin\Release\PC.ExpressionCalculator*.dll" target="lib\net40" /> 
+	  <file src="PC.ExpressionTree\bin\Release\PC.ExpressionTree.dll" target="lib\net40" /> 
+	  <file src="PC.Framework\bin\Release\PC.Framework.dll" target="lib\net40" /> 
+	  <file src="PC.Repository\bin\Release\PC.Repository.dll" target="lib\net40" /> 
+	  <file src="..\lib\iBatis\*.dll" target="lib\net40" /> 
 </files>
 </package>
