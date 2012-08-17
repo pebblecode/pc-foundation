@@ -134,6 +134,7 @@ nant -logfile:prebuild.log unittest.prebuild</PreBuildEvent>
   <Import Project="..\Common.Targets" />
   <Import Project="..\Version.Targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir $(SolutionDir)obj\Release\PC.Framework.Test</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

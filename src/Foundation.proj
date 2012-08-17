@@ -22,7 +22,7 @@
     </ItemGroup>
 	
 	<!-- Copy the build directory from solution source to the nuspec output directory -->
-    <Copy SourceFiles="@(BuildContent)" DestinationFiles="@(BuildContent->'$(PackageDir)\Content\Build\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <!--<Copy SourceFiles="@(BuildContent)" DestinationFiles="@(BuildContent->'$(PackageDir)\Content\Build\%(RecursiveDir)%(Filename)%(Extension)')" />-->
 	
     <!-- Copy the nuspec template files to the package dir -->
     <Copy SourceFiles="$(MSBuildProjectDirectory)\PebbleCode.Foundation.nuspec" DestinationFolder="$(PackageDir)" />
