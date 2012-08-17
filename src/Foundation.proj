@@ -7,7 +7,7 @@
     <SolutionFile>$(BaseDir)\Foundation.sln</SolutionFile>
   </PropertyGroup>
   
-  <Target Name="default" DependsOnTargets="Compile; Package" />
+  <Target Name="default" DependsOnTargets="Compile" />
  
   <Target Name="Compile">
     <MSBuild Projects="$(SolutionFile)" Properties="Configuration=$(Configuration)"  />
