@@ -71,7 +71,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDbContext.cs" />
-    <Compile Include="BaseRepositoryModule.cs" />
     <Compile Include="EditableEntityRepository.cs" />
     <Compile Include="Exceptions\EntityDescriptor.cs" />
     <Compile Include="EntityRepository.cs" />
@@ -80,9 +79,8 @@
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="IEditableEntityRepository.cs" />
     <Compile Include="IEntityRepository_T.cs" />
-    <Compile Include="MockRepositoryModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoryModule.cs" />
+    <Compile Include="RepositoryNinjectModule.cs" />
     <Compile Include="RepositoryTransaction.cs" />
     <Compile Include="TransactionProvider.cs" />
   </ItemGroup>
