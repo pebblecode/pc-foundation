@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace PebbleCode.Repository
 {
-    public partial class RepositoryModule : BaseRepositoryModule
+    public partial class RepositoryModule : BaseRepositoryNinjectModule
     {
     }
 
