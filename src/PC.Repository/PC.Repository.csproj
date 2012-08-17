@@ -81,7 +81,6 @@
     <Compile Include="IEntityRepository_T.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryNinjectModule.cs" />
-    <Compile Include="RepositoryNinjectModule.cs" />
     <Compile Include="RepositoryTransaction.cs" />
     <Compile Include="TransactionProvider.cs" />
   </ItemGroup>
