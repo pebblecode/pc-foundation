@@ -32,7 +32,7 @@ namespace PebbleCode.Repository
 	/// <summary>
 	/// Add support for this repo to the global DB context accessor
 	/// </summary>
-    public partial class DbContext
+    public partial class TestDbContext
     {
         [Inject]
         public NodeBuilderTestRepository NodeBuilderTestRepo { get; set; }
