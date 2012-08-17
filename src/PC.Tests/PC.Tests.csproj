@@ -180,6 +180,7 @@
     <Compile Include="Repository\Handmade\ThingRepository.cs" />
     <Compile Include="Repository\Handmade\VersionedThingRepository.cs" />
     <Compile Include="Repository\Handmade\WidgetRepository.cs" />
+    <Compile Include="Repository\MockTransactionProvider.cs" />
     <Compile Include="Repository\RepositoryNinjectModule.cs">
       <SubType>Code</SubType>
     </Compile>

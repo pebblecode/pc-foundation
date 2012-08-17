@@ -28,7 +28,6 @@ namespace PebbleCode.Repository
                 .Where(type => typeof(EntityRepository).IsAssignableFrom(type) && !type.IsAbstract)
                 .ForEach(repoType => Bind(repoType).ToMockSingleton());
 
-
             // For each BindRepository_XXX method, via reflection, call
             foreach (MethodInfo method in
                 this.GetType()

@@ -6,6 +6,7 @@ using IBatisNet.DataMapper;
 
 namespace PebbleCode.Repository
 {
+
     /// <summary>
     /// Wraps all proceeding calls, on current thread, to repo methods in a transaction until Commit or 
     /// Rollback is called or until RepositoryTransaction is disposed.
@@ -14,6 +15,10 @@ namespace PebbleCode.Repository
     {
         private ISqlMapper _mapper;
         private bool _finished = false;
+
+        public RepositoryTransaction()
+        {
+        }
 
         /// <summary>
         /// Called from EntityRepository.BeginTransaction
