@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>PebbleCode.Foundation</id>
-    <version></version>
+    <version>0.0.0.0</version>
     <authors>Alex Butcher</authors>
     <owners>Alex Butcher</owners>
     <description>pebble {code} foundation libraries</description>
