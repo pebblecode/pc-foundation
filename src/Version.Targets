@@ -27,12 +27,17 @@
     <Version VersionFile="$(BaseDir)\version.txt">
       <Output TaskParameter="Major" PropertyName="AssemblyVersionMajor" />
       <Output TaskParameter="Minor" PropertyName="AssemblyVersionMinor" />
-      <Output TaskParameter="Build" PropertyName="AssemblyVersionBuild" />
+      <Output TaskParameter="Build" PropertyName="AssemblyVersionRevision" />
     </Version>
-    <PropertyGroup>
-      <MajorAssemblyVersion>$(AssemblyVersionMajor).$(AssemblyVersionMinor).$(AssemblyVersionBuild)</MajorAssemblyVersion>
+    <PropertyGroup Condition="$(CommandLineVersionNumber)!=''">
+      <!-- <MajorAssemblyVersion>$(AssemblyVersionMajor).$(AssemblyVersionMinor).$(AssemblyVersionRevision)</MajorAssemblyVersion> -->
+	  <MajorAssemblyVersion>$(CommandLineVersionNumber)</MajorAssemblyVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="$(CommandLineVersionNumber)==''">
+      <MajorAssemblyVersion>$(AssemblyVersionMajor).$(AssemblyVersionMinor).$(AssemblyVersionRevision)</MajorAssemblyVersion>
     </PropertyGroup>
   </Target>
+  
   
   <Target Name="GenerateAssemblyVersionInfoFileCs" BeforeTargets="CoreCompile" DependsOnTargets="LoadAssemblyVersion" Condition="'$(MSBuildProjectExtension)' == '.csproj'">
     <AssemblyInfo CodeLanguage="CS"
