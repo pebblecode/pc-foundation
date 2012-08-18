@@ -32,3 +32,4 @@ db/tmp/
 src/AssemblyVersion.cs
 src/AssemblyVersion.fs
 [Ll]ogs/
+src/packages
