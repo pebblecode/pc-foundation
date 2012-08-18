@@ -94,7 +94,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="..\Common.Targets" />
-  <Import Project="..\Version.Targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

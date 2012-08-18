@@ -65,6 +65,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="..\Common.Targets" />
-  <Import Project="..\Version.Targets" />
 </Project>
