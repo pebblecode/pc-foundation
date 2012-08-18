@@ -29,6 +29,6 @@ _ReSharper*/
 .svn/
 db/tmp/
 *.cmpuo
-solution/AssemblyVersion.cs
-solution/AssemblyVersion.fs
+src/AssemblyVersion.cs
+src/AssemblyVersion.fs
 [Ll]ogs/

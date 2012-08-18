@@ -7,25 +7,5 @@
   </PropertyGroup>
   
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
-  <!--
-  <Target Name="CopyToSolutionPackageDir" AfterTargets="Compile" DependsOnTargets="Compile">
-	<Message Text="$(MSBuildProjectDirectory)" />
-    <PropertyGroup>
-      <SourceOutputDir>$(MSBuildProjectDirectory)\obj\$(Configuration)</SourceOutputDir>
-    </PropertyGroup>
-			
-	<ItemGroup>
-		<ProjOutputFile Include="$(SourceOutputDir)\*.dll;$(SourceOutputDir)\*.xml;$(SourceOutputDir)\*.pdb" Condition="'$(OutputType)' != 'WinExe'" />
-		<ProjOutputFile Include="$(SourceOutputDir)\*.exe;$(SourceOutputDir)\*.pdb" Condition="'$(OutputType)' == 'WinExe'" />
-	</ItemGroup>
-	
-	PC.Tests.Integration
-	
-	<Copy SourceFiles="@(ProjOutputFile)"
-		  DestinationFolder="$(SolutionDir)\obj\$(Configuration)\lib" Condition="'$(OutputType)' != 'WinExe'" />
-	<Copy SourceFiles="@(ProjOutputFile)"
-		  DestinationFolder="$(SolutionDir)\obj\$(Configuration)\tools" Condition="'$(OutputType)' == 'WinExe'" />
-	
-  </Target>
-  -->
+
 </Project>

@@ -4,8 +4,8 @@
     <id>PebbleCode.Foundation</id>
     <version>0.0.0.0</version>
     <authors>Alex Butcher</authors>
-    <owners>Alex Butcher</owners>
-    <description>pebble {code} foundation libraries</description>
+    <owners>Pebble {code}</owners>
+    <description>Pebble {code} foundation libraries</description>
     <dependencies>
 		<dependency id="CommonServiceLocator" version="1.0" />
 		<dependency id="EnterpriseLibrary.Common" version="5.0.505.0" />
