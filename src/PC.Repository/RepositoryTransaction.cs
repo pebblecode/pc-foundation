@@ -64,7 +64,7 @@ namespace PebbleCode.Repository
         public virtual void Dispose()
         {
             if (!_finished)
-                Commit();
+                Rollback();
         }
     }
 }

@@ -32,19 +32,6 @@ namespace SGP.Tests.Integration.RepositoryTests
         }
 
         [TestMethod]
-        public void AutoCommitTest()
-        {
-            // Add a new thing, let using statement auto commit.
-            using (RepositoryTransaction rt = EntityRepository.BeginTransaction())
-            {
-                ThingRepo.Save(new Thing() { Name = "TestThing", Corners = 1 });
-            }
-
-            // Check thing was saved
-            Assert.AreEqual(1, ThingRepo.GetAll().Count, "Thing should be saved");
-        }
-
-        [TestMethod]
         public void RollbackTest()
         {
             // Add a new thing, but rollback xn.
@@ -167,6 +154,7 @@ namespace SGP.Tests.Integration.RepositoryTests
                     using (RepositoryTransaction rt = EntityRepository.BeginTransaction())
                     {
                         ThingRepo.Save(new Thing() { Name = "T2", Corners = 1 });
+                        rt.Commit();
                     }
                 }
                 finally
