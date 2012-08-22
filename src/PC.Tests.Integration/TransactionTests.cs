@@ -107,6 +107,49 @@ namespace SGP.Tests.Integration.RepositoryTests
         }
 
         [TestMethod]
+        public void ExceptionRollbackTest()
+        {
+            try
+            {
+                // Add a new thing but don't commit.
+                using (var transaction = EntityRepository.BeginTransaction())
+                {
+                    ThingRepo.Save(new Thing() { Name = "TestThing", Corners = 1 });
+                    Assert.AreEqual(1, ThingRepo.GetAll().Count, "Thing should be saved");
+                    // Throw excepiton before commiting.
+                    throw new Exception();
+                }
+            }
+            catch
+            {
+            }
+
+            Assert.AreEqual(0, ThingRepo.GetAll().Count, "Thing save should have been rolled back");
+        }
+
+        [TestMethod]
+        public void ExceptionCommitTest()
+        {
+            try
+            {
+                // Add a new thing and commit.
+                using (var transaction = EntityRepository.BeginTransaction())
+                {
+                    ThingRepo.Save(new Thing() { Name = "TestThing", Corners = 1 });
+                    Assert.AreEqual(1, ThingRepo.GetAll().Count, "Thing should be saved");
+                    transaction.Commit();
+                    // Throw excepiton after commiting.
+                    throw new Exception();
+                }
+            }
+            catch
+            {
+            }
+
+            Assert.AreEqual(1, ThingRepo.GetAll().Count, "Thing have been saved");
+        }
+
+        [TestMethod]
         public void ThreadSafetyTest()
         {
             // Run first thread, start a transaction, add a new entity, but do not commit. Pause thread.
