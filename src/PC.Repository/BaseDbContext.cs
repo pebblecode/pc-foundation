@@ -8,10 +8,9 @@ namespace PebbleCode.Repository
 {
     public abstract class BaseDbContext
     {
-        public RepositoryTransaction BeginTransaction()
+        public virtual RepositoryTransaction BeginTransaction()
         {
             return Kernel.Get<TransactionProvider>().BeginTransaction();
         }
     }
-
 }
