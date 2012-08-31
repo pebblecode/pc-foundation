@@ -82,6 +82,7 @@
     <Compile Include="EntityFlagTests\BitwiseXorTests.cs" />
     <Compile Include="EntityFlagTests\EqualsTests.cs" />
     <Compile Include="EntityFlagTests\RemoveTests.cs" />
+    <Compile Include="PC.Framework\DateTimeConverterTestsTests.cs" />
     <Compile Include="PC.Framework\EnumHelpers_PascalCaseToReadableNameTests.cs" />
     <Compile Include="PC.Framework\EnumHelpers_ReadableNameTests.cs" />
     <Compile Include="PC.Framework\ExtensionsTests_ReadCsv.cs" />

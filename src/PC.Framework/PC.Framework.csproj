@@ -111,6 +111,8 @@
     <Compile Include="Configuration\ProfilerSettings.cs" />
     <Compile Include="Configuration\EmailSettings.cs" />
     <Compile Include="Data\Param.cs" />
+    <Compile Include="Dates\DateRange.cs" />
+    <Compile Include="Dates\DateTimeConverter.cs" />
     <Compile Include="Dependancy\Resolver.cs" />
     <Compile Include="Email\IEmailer.cs" />
     <Compile Include="EnumHelpers.cs" />
