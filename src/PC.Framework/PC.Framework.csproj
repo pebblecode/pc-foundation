@@ -121,6 +121,7 @@
     <Compile Include="Exceptions\ExpectedException.cs" />
     <Compile Include="IoC\NinjectMoqExtensions.cs" />
     <Compile Include="Logging\CustomErrorHandlerServiceBehavior_T.cs" />
+    <Compile Include="Logging\DataContractLogHelper.cs" />
     <Compile Include="Logging\DefaultLoggingErrorAdapter.cs" />
     <Compile Include="Logging\ScheduledTimeEmailTraceListener.cs" />
     <Compile Include="Logging\ScheduledTimeRollingFlatFileListener.cs" />
