@@ -122,6 +122,8 @@
     <Compile Include="BaseIntegrationTest.cs" />
     <Compile Include="BaseTest.cs" />
     <Compile Include="Entities\TestUpdateContexts.cs" />
+    <Compile Include="Fakes\FakeLogManager.cs" />
+    <Compile Include="Fakes\FakeLogManagerLogWrittenException.cs" />
     <Compile Include="Repository\DatabaseUpdateMonitor.cs">
       <SubType>Code</SubType>
     </Compile>

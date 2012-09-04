@@ -8,12 +8,12 @@ using PebbleCode.Framework.Logging;
 namespace PebbleCode.Framework.Network
 {
     /// <summary>
-    /// A wrapper for the starksoft FTP client object.  Provides retry capability
-    /// for establishing a connection and wraps the connection with teh disposable pattern.
+    /// A wrapper for the StarkSoft FTP client object.  Provides retry capability
+    /// for establishing a connection and wraps the connection with the disposable pattern.
     /// 
     /// Also provides locking to prevent multiple connections being established at once.
     /// </summary>
-    public class FtpRetryClient : IDisposable
+    public class FtpRetryClient : IFtpRetryClient
     {
         private static readonly AutoResetEvent _ftpConnectionSync = new AutoResetEvent(true);
         private readonly static TimeSpan _connectionOpenWait = TimeSpan.FromSeconds(15);
@@ -42,7 +42,7 @@ namespace PebbleCode.Framework.Network
             }
             catch (Exception ex)
             {
-                Exception ex2 = Logger.WriteUnexpectedException(ex, "Failed to open connection to bloomberg", Category.Ftp);
+                Exception ex2 = Logger.WriteUnexpectedException(ex, "Failed to open connection to {0}".fmt(host), Category.Ftp);
 
                 //If we fail to open a connection, don't prevent other threads from trying to do so.
                 _ftpConnectionSync.Set();

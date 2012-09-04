@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PebbleCode.Framework.Logging;
 
 namespace PebbleCode.Tests
 {
@@ -10,8 +11,9 @@ namespace PebbleCode.Tests
     /// Integration tests touch the database, and therefore it should be reset between tests
     /// </summary>
     [TestClass]
-    public abstract class BaseTest<THelper>
+    public abstract class BaseTest<TLogManager, THelper>
         where THelper : TestHelper, new()
+        where TLogManager : ILogManager
     {
         /// <summary>
         /// Constructor
@@ -25,9 +27,10 @@ namespace PebbleCode.Tests
         /// Get a handle on the unit test helper
         /// </summary>
         protected virtual THelper Helper { get; private set; }
+        protected abstract TLogManager LoggerInstance { get; }
 
         /// <summary>
-        /// Initialiser for unit tests
+        /// Initialise for unit tests
         /// </summary>
         [TestInitialize]
         public virtual void TestInitialise()
@@ -41,7 +44,7 @@ namespace PebbleCode.Tests
         [TestCleanup]
         public virtual void TestCleanup()
         {
-            Helper.TestCleanup();
+            Helper.TestCleanup(); 
         }
 
         /// <summary>

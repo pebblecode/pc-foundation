@@ -23,5 +23,6 @@ using System.Runtime.InteropServices;
 [assembly: Guid("4de4345f-917b-4e84-b140-eadad60fc30f")]
 
 [assembly: InternalsVisibleTo("PC.Tests.Unit")]
+[assembly: InternalsVisibleTo("PC.Tests")]
 [assembly: AssemblyVersion("0.0.0.0")]
 [assembly: AssemblyFileVersion("0.0.0.0")]

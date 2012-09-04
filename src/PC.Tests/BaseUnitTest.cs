@@ -14,9 +14,11 @@ using PebbleCode.Entities;
 using PebbleCode.Framework;
 using PebbleCode.Framework.Configuration;
 using PebbleCode.Framework.IoC;
+using PebbleCode.Framework.Logging;
 using PebbleCode.Repository;
 using Ninject.Modules;
 using PebbleCode.Framework.Collections;
+using PebbleCode.Tests.Fakes;
 
 namespace PebbleCode.Tests
 {
@@ -24,7 +26,7 @@ namespace PebbleCode.Tests
     /// A base class for unit tests - mocks out all database access in singleton scope
     /// </summary>
     [TestClass]
-    public abstract class BaseUnitTest<THelper> : BaseTest<THelper>
+    public abstract class BaseUnitTest<THelper> : BaseTest<FakeLogManager, THelper>
         where THelper : TestHelper, new()
     {
         protected MoqMockingKernel _mockContainer = null;
@@ -78,6 +80,16 @@ namespace PebbleCode.Tests
 
             //Make this kernel available to all other libraries
             Kernel.Instance = _mockContainer;
+
+            //Fake logger
+            _loggerInstance = new FakeLogManager();
+            Logger.LoggerInstance = _loggerInstance;
+        }
+
+        private FakeLogManager _loggerInstance;
+        protected override FakeLogManager LoggerInstance
+        {
+            get { return _loggerInstance; }
         }
 
         /// <summary>

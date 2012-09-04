@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using PebbleCode.Framework.Email;
+﻿using PebbleCode.Framework.Email;
 
-namespace PebbleCode.Tests
+namespace PebbleCode.Tests.Fakes
 {
     public class FakeEmailer : IEmailer
     {

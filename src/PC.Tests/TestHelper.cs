@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-
 using PebbleCode.Framework;
-using PebbleCode.Repository;
 using PebbleCode.Framework.Logging;
-using PebbleCode.Framework.Dates;
 
 namespace PebbleCode.Tests
 {
@@ -20,14 +10,7 @@ namespace PebbleCode.Tests
     /// </summary>
     public class TestHelper
     {
-        Random _rng = new Random((int)DateTime.Now.Ticks);
-
-        /// <summary>
-        /// Constructor, used by BaseIntegrationTest and BaseUnitTest
-        /// </summary>
-        public TestHelper()
-        {
-        }
+        private readonly Random _rng = new Random((int)DateTime.Now.Ticks);
 
         /// <summary>
         /// Get or set the expected error count for a test. Inits to zero
@@ -41,8 +24,6 @@ namespace PebbleCode.Tests
         [ExpectedException(typeof(Exception))]
         internal virtual void TestInitialise()
         {
-            Logger.ResetErrorFlags();
-            ExpectedErrorCount = 0;
         }
 
         /// <summary>
@@ -50,11 +31,15 @@ namespace PebbleCode.Tests
         /// </summary>
         internal virtual void TestCleanup()
         {
+        }
+
+        public void AssertLoggerError(CountableLogManager logManager)
+        {
             // Ensure correct number of errors have been logged
-            if (ExpectedErrorCount == 0)
-                Assert.IsFalse(Logger.ErrorsWrittenToLog, "Errors written to log. If expected, set ExpectedErrorCount during test");
-            else
-                Assert.AreEqual(ExpectedErrorCount, Logger.ErrorCount, "Incorrect number of errors written to log");
+            if (!logManager.IsCountChecked)
+            {
+                Assert.AreEqual(0, logManager.ErrorCount, "Errors written to log. If expected, set ExpectedErrorCount during test");
+            }
         }
 
         /// <summary>
