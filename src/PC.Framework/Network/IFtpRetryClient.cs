@@ -1,9 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Starksoft.Net.Ftp;
 
 namespace PebbleCode.Framework.Network
 {
-    public interface IFtpRetryClient
+    public interface IFtpRetryClient : IDisposable
     {
         bool PutFile(Stream inputStream, string remotePath, FileAction action);
         bool GetFile(string remotePath, string localPath, FileAction action);

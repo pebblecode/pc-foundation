@@ -14,7 +14,7 @@ namespace PebbleCode.Framework.Logging
         public const TraceEventType DEBUG = TraceEventType.Verbose;
         public const TraceEventType INFO = TraceEventType.Information;
 
-        internal static ILogManager LoggerInstance
+        public static ILogManager LoggerInstance
         {
             get
             {
