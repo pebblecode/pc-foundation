@@ -124,6 +124,8 @@
     <Compile Include="Logging\CustomErrorHandlerServiceBehavior_T.cs" />
     <Compile Include="Logging\DataContractLogHelper.cs" />
     <Compile Include="Logging\DefaultLoggingErrorAdapter.cs" />
+    <Compile Include="Logging\FakeLogManager.cs" />
+    <Compile Include="Logging\FakeLogManagerLogWrittenException.cs" />
     <Compile Include="Logging\ILogManager.cs" />
     <Compile Include="Logging\LogManager.cs" />
     <Compile Include="Logging\ScheduledTimeEmailTraceListener.cs" />
