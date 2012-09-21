@@ -136,8 +136,8 @@ namespace PebbleCode.Framework.Logging
                         object value = property.GetValue(dataContract, null);
                         if (_nestedHelpers.ContainsKey(property.Name))
                             _nestedHelpers[property.Name].Log(value, category);
-                        else if (property.PropertyType.Name == "List`1")
-                            LogList(category, property, value);
+                        else if (IsEnumerable(property.PropertyType.Name))
+                            LogEnumerable(category, property, value);
                         else
                             LogProperty(category, property, value);
                     }
@@ -149,7 +149,12 @@ namespace PebbleCode.Framework.Logging
             }
         }
 
-        private void LogList(string category, PropertyInfo property, object value)
+        private bool IsEnumerable(string type)
+        {
+            return (type == "List`1") || (type == "IEnumerable`1");
+        }
+
+        private void LogEnumerable(string category, PropertyInfo property, object value)
         {
             var list = value as IEnumerable;
             Type type = property.PropertyType.GetGenericArguments()[0];
