@@ -136,7 +136,7 @@ namespace PebbleCode.Framework.Logging
                         object value = property.GetValue(dataContract, null);
                         if (_nestedHelpers.ContainsKey(property.Name))
                             _nestedHelpers[property.Name].Log(value, category);
-                        else if (IsEnumerable(property.PropertyType.Name))
+                        else if (IsEnumerable(property.PropertyType))
                             LogEnumerable(category, property, value);
                         else
                             LogProperty(category, property, value);
@@ -149,25 +149,32 @@ namespace PebbleCode.Framework.Logging
             }
         }
 
-        private bool IsEnumerable(string type)
+        private bool IsEnumerable(Type type)
         {
-            return (type == "List`1") || (type == "IEnumerable`1");
+            return typeof(string) != type && typeof(IEnumerable).IsAssignableFrom(type);
         }
 
         private void LogEnumerable(string category, PropertyInfo property, object value)
         {
-            var list = value as IEnumerable;
-            Type type = property.PropertyType.GetGenericArguments()[0];
-            if (_logger.IsRequiredType(type))
+            if (value != null)
             {
-                var logger = new DataContractLogHelper(_logger, type, category, _level + 1);
-                foreach (object item in list)
-                    logger.Log(item, category);
+                var list = value as IEnumerable;
+                Type type = property.PropertyType.GetGenericArguments()[0];
+                if (_logger.IsRequiredType(type))
+                {
+                    var logger = new DataContractLogHelper(_logger, type, category, _level + 1);
+                    foreach (object item in list)
+                        logger.Log(item, category);
+                }
+                else
+                {
+                    foreach (object item in list)
+                        LogProperty(category, property, item);
+                }
             }
             else
             {
-                foreach (object item in list)
-                    LogProperty(category, property, item);
+                LogProperty(category, property, null);
             }
         }
 
