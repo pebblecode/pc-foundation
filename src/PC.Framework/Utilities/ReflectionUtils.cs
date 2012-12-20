@@ -233,10 +233,17 @@ namespace PebbleCode.Framework.Utilities
         {
             get
             {
-                StackTrace st = new StackTrace();
-                foreach (StackFrame frame in st.GetFrames())
+                var st = new StackTrace();
+                var stackFrames = st.GetFrames();
+
+                if (stackFrames == null) return false;
+
+                foreach (var frame in stackFrames)
                 {
                     MethodBase caller = frame.GetMethod();
+
+                    if (caller == null || caller.DeclaringType == null) return false;
+
                     if (caller.DeclaringType.FullName.Contains("Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestExecuter"))
                     {
                         return true;
